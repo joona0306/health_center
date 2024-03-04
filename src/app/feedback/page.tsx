@@ -1,23 +1,14 @@
-'use client';
 import HeaderComponent from '@/components/common/HeaderComponent';
 import Link from 'next/link';
+import React from 'react';
 import styles from '@/styles/header.module.scss';
-import { SlFeed, SlLayers, SlShare } from 'react-icons/sl';
+import { SlFeed, SlLayers } from 'react-icons/sl';
 
-export default function Home() {
+const Feedback = (): JSX.Element => {
   return (
     <>
       <HeaderComponent
         rightElement={[
-          <button
-            key="share"
-            onClick={() => {
-              alert('지도공유');
-            }}
-            className={styles.box}
-          >
-            <SlShare />
-          </button>,
           <Link key="feedback" href="/feedback" className={styles.box}>
             <SlFeed />
           </Link>,
@@ -26,7 +17,9 @@ export default function Home() {
           </Link>,
         ]}
       />
-      <main>테스트</main>
+      <main>피드백 페이지입니다</main>
     </>
   );
-}
+};
+
+export default Feedback;

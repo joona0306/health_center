@@ -3,6 +3,7 @@ import HeaderComponent from '@/components/common/HeaderComponent';
 import Link from 'next/link';
 import styles from '@/styles/header.module.scss';
 import { SlFeed, SlLayers, SlShare } from 'react-icons/sl';
+import MapSection from '@/components/map/MapSection';
 
 export default function Home() {
   return (
@@ -26,7 +27,9 @@ export default function Home() {
           </Link>,
         ]}
       />
-      <main>테스트</main>
+      <main style={{ width: '100%', height: '100%' }}>
+        <MapSection />
+      </main>
     </>
   );
 }

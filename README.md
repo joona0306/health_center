@@ -28,3 +28,11 @@
     "extends": ["next/core-web-vitals", "prettier"]
   }
   ```
+- scss 설정
+  : `yarn add sass`
+
+## 2. 깃허브 셋팅
+
+- 저장소명 : health-center
+- 설명 : 전국 보건소 위치 안내 서비스
+- `git remote add origin https://github.com/아이디/health-center.git`

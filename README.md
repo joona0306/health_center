@@ -117,3 +117,31 @@ const Map = () => {
 
 export default Map;
 ```
+
+## 지도 API 활용하기
+
+- [문서](https://navermaps.github.io/maps.js.ncp/docs/tutorial-2-Getting-Started.html)
+- /src/components/map/Map.tsx
+
+```tsx
+import Script from 'next/script';
+import React from 'react';
+
+const Map = () => {
+  const initializeMap = (): void => {
+    console.log('로딩완료');
+  };
+  return (
+    <>
+      {/* Next.js 에서 외부 자바스크립트 참조시 next/script */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=비밀번호`}
+        onLoad={initializeMap}
+      />
+    </>
+  );
+};
+
+export default Map;
+```

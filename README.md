@@ -1046,3 +1046,7 @@ const Marker = ({ map, coordinates, icon }: Marker) => {
 
 export default Marker;
 ```
+
+NEXT_PUBLIC_NCP_CLIENT_ID=
+// 환경변수 사용 (vercel 에 배포시 반드시 기재)
+const MAP_KEY = process.env.NEXT_PUBLIC_NCP_CLIENT_ID;

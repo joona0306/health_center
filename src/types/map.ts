@@ -15,4 +15,6 @@ export type Marker = {
   map: NaverMap;
   coordinates: Coordinates;
   icon: ImageIcon;
+  // 사용자가 클릭한 경우 처리
+  onClick: () => void;
 };

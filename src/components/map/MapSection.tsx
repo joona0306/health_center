@@ -1,18 +1,42 @@
 import React from 'react';
 import Map from './Map';
-import { UseMap } from '@/hooks/useMap';
+import { INITIAL_CENTER, INITIAL_ZOOM, useMap } from '@/hooks/useMap';
 import { NaverMap } from '@/types/map';
 import Markers from '../home/Markers';
+import { useCurrentInfo } from '@/hooks/useCurrentInfo';
+import { useSearchParams } from 'next/navigation';
+import { Coordinates } from '@/types/info';
 
 const MapSection = () => {
+  // 지도 화면이 렌더링 되면 URL의 Prams를 읽는다.
+  // localhost:3000/?zoom=12&lat=37.2578509&lng=127.3980816
+  const searchParams = useSearchParams();
+  // console.log(searchParams);
+  const zoom = searchParams.get('zoom');
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
+  // console.log(zoom, lat, lng);
+  const initialZoom = zoom ? Number(zoom) : INITIAL_ZOOM;
+  const initialCenter: Coordinates =
+    lat && lng ? [Number(lat), Number(lng)] : INITIAL_CENTER;
+
+  // 보관하고 있더 SWR 좌표값을 삭제한다.
+  const { clearCurrentInfo } = useCurrentInfo();
+
   // 커스텀 훅으로 Naver Map 초기화 시도
-  const { initializeMap } = UseMap();
+  const { initializeMap } = useMap();
   const onLoadMap = (map: NaverMap) => {
     initializeMap(map);
+    // 네이버 API 문서 참조
+    naver.maps.Event.addListener(map, 'click', clearCurrentInfo);
   };
   return (
     <>
-      <Map onLoad={onLoadMap} />
+      <Map
+        onLoad={onLoadMap}
+        initialCenter={initialCenter}
+        initialZoom={initialZoom}
+      />
       <Markers />
     </>
   );

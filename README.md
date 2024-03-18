@@ -16,3 +16,7 @@
 - copy-to-clipboard
 - Git/GitHub
 - 공공 API(보건소 API)
+
+## 프로젝트 빌드 시 주의사항
+
+- Next.js 14 버전 Vercel 배포 적용 예외처리

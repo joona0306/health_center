@@ -24,7 +24,7 @@ export default function Home() {
   const copyAndSaveMapInfo = useCallback(() => {
     const mapOptions = getMapOption();
     // console.log(mapOptions);
-    const query = `/?zoom=${mapOptions.zoom}&lat=${mapOptions.center[0]}&lng=${mapOptions.center[1]}`;
+    const query = `https://health-center-joona0306.vercel.app/?zoom=${mapOptions.zoom}&lat=${mapOptions.center[0]}&lng=${mapOptions.center[1]}`;
     // console.log(query);
     // 패스 이동을 표현
     router.push(query);

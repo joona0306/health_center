@@ -5,6 +5,9 @@ import {
   collection,
   FirestoreError,
   QuerySnapshot,
+  query,
+  Query,
+  orderBy,
 } from 'firebase/firestore';
 
 // FB 문서들을 모아 놓은 배열의 interface 정의
@@ -23,9 +26,22 @@ export const useCollection = (transaction: string) => {
 
   // collection 이 변경된 경우 실행하도록 설정
   useEffect(() => {
+    // FB 쿼리 만들기
+    // 추후 필요시 쿼리인덱스 생성도 필요
+    // 아래는 등록된 글 중 최신 목록 순서로 정렬 후 출력
+    // query(컬렉션참조, 원하는 명령어 쿼리)
+    // orderBy(기준이 되는 필드)
+    const q: Query = query(
+      collection(appFireStore, transaction),
+      orderBy('createdTime', 'desc'),
+    );
+
     // collection(FB프로젝트, collection)
     const unsubscribe = onSnapshot(
-      collection(appFireStore, transaction),
+      // 실시간으로 목록을 불러온다
+      // collection(appFireStore, transaction),
+      q,
+
       (snapshot: QuerySnapshot) => {
         let result: Document[] = [];
         // console.log(snapshot);

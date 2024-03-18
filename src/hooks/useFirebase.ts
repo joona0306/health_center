@@ -6,8 +6,10 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  doc,
   DocumentReference,
   FirestoreError,
+  updateDoc,
 } from 'firebase/firestore';
 import { Reducer, useReducer } from 'react';
 
@@ -22,7 +24,9 @@ interface State {
 type Action =
   | { type: 'isPending' }
   | { type: 'addDoc'; payload: DocumentReference }
-  | { type: 'error'; payload: string };
+  | { type: 'error'; payload: string }
+  | { type: 'deleteDoc' }
+  | { type: 'editDoc' };
 
 // 리듀서에 보관한 초기값
 const initState: State = {
@@ -70,6 +74,24 @@ const storeReducer: Reducer<State, Action> = (state, action) => {
         success: false,
         error: action.payload,
       };
+    case 'deleteDoc':
+      // 문서 삭제...
+      return {
+        ...state,
+        isPending: false,
+        document: null,
+        success: true,
+        error: null,
+      };
+    case 'editDoc':
+      // 문서 업데이트...
+      return {
+        ...state,
+        isPending: false,
+        document: null,
+        success: true,
+        error: null,
+      };
     default:
       // 최소 아무 작업을 하지 않더라도 리듀서함수는 state, 즉 원본이라도 리턴해야함
       return state;
@@ -98,7 +120,7 @@ export const useFirebase = (transaction: string) => {
       const createdTime = timeStamp.fromDate(new Date());
       // FB의 API 문서 중에 문서 추가 기능을 입력
       const docRef = await addDoc(colRef, { ...doc, createdTime });
-      console.log(docRef);
+      // console.log(docRef);
       dispatch({ type: 'addDoc', payload: docRef });
     } catch (error) {
       dispatch({ type: 'error', payload: (error as FirestoreError).message });
@@ -106,9 +128,32 @@ export const useFirebase = (transaction: string) => {
   };
 
   // Document를 삭제한다.
-  const deleteDocument = (id: string) => {
-    // await deleteDoc(doc(db, 'cities', 'DC'));
+  const deleteDocument = async (id: string) => {
+    dispatch({ type: 'isPending' });
+    try {
+      // 어떤 FB Document 인가를 알려주는 메서드
+      // FB 에서 아이디를 본내면 찾아주는 메서드 doc()
+      const docRef = await deleteDoc(doc(colRef, id));
+      dispatch({ type: 'deleteDoc' });
+    } catch (error) {
+      dispatch({ type: 'error', payload: (error as FirestoreError).message });
+    }
   };
 
-  return { response, addDocument, deleteDocument };
+  // Document 업데이트
+  const editDocument = async (id: string, data: any) => {
+    dispatch({ type: 'isPending' });
+    try {
+      // FB 문서를 참조
+      // 수정을 하기 위해서는 collection 참조 및 문서 id를 전달
+      const docRef = doc(appFireStore, transaction, id);
+      // 이후 업데이트
+      await updateDoc(docRef, data);
+      dispatch({ type: 'editDoc' });
+    } catch (error) {
+      dispatch({ type: 'error', payload: (error as FirestoreError).message });
+    }
+  };
+
+  return { response, addDocument, deleteDocument, editDocument };
 };
